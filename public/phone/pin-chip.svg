@@ -1,0 +1,23 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="56" height="49.2593" viewBox="0 0 56 49.2593" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Frame 1">
+<g clip-path="url(#clip0_0_2122)">
+<rect width="56" height="49.2593" rx="5.7037" fill="#BB934D"/>
+<path id="Polygon 1" d="M28 14.5185L34.9663 17.404L37.8519 24.3703L34.9663 31.3366L28 34.2222L21.0337 31.3366L18.1482 24.3703L21.0337 17.404L28 14.5185Z" stroke="#532C00" stroke-width="1.03704"/>
+<path id="Ellipse 1" d="M18.6015 38.7673C21.4514 40.5631 24.7561 41.5048 28.1244 41.481C31.4928 41.4572 34.7838 40.4689 37.6081 38.6332" stroke="#532C00" stroke-width="1.03704" stroke-linecap="round"/>
+<path id="Vector 1" d="M28 15.037V-1.55559" stroke="#532C00" stroke-width="1.03704"/>
+<path id="Vector 8" d="M28 49.2593V33.963" stroke="#532C00" stroke-width="1.03704"/>
+<path id="Vector 2" d="M4.47035e-07 11.9259L17.3704 11.9259L21 17.3703" stroke="#532C00" stroke-width="1.03704"/>
+<path id="Vector 4" d="M18.1482 24.3704H3.03388e-05" stroke="#532C00" stroke-width="1.03704"/>
+<path id="Vector 3" d="M4.47035e-07 36.2964L17.3704 36.2964L21 31.1112" stroke="#532C00" stroke-width="1.03704"/>
+<path id="Vector 5" d="M55.4815 11.9259L38.6296 11.9259L35 17.3703" stroke="#532C00" stroke-width="1.03704"/>
+<path id="Vector 6" d="M37.8518 24.3704H55.4815" stroke="#532C00" stroke-width="1.03704"/>
+<path id="Vector 7" d="M55.4815 36.2964H38.6296L35 31.1112" stroke="#532C00" stroke-width="1.03704"/>
+</g>
+<rect x="0.518519" y="0.518519" width="54.963" height="48.2222" rx="5.18519" stroke="#532C00" stroke-width="1.03704"/>
+</g>
+<defs>
+<clipPath id="clip0_0_2122">
+<rect width="56" height="49.2593" rx="5.7037" fill="white"/>
+</clipPath>
+</defs>
+</svg>

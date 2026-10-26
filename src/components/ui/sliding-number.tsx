@@ -36,7 +36,9 @@ function Digit({ value, place }: { value: number; place: number }) {
 
 function Number({ mv, number }: { mv: MotionValue<number>; number: number }) {
   const uniqueId = useId();
-  const [ref, bounds] = useMeasure();
+  // offsetSize: the layout height, not the transformed one. Inside a scaled ancestor (the phone frame) the transformed
+  // height is smaller, so the digits stacked closer than the clip box was tall and the neighbors showed above and below.
+  const [ref, bounds] = useMeasure({ offsetSize: true });
 
   const y = useTransform(mv, (latest) => {
     if (!bounds.height) return 0;

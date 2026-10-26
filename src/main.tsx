@@ -10,6 +10,8 @@ import App from "./App"
 import { initFluidSystem } from "@/lib/fluid"
 import { initColorSystem } from "@/lib/colors"
 import "./index.css"
+import "./ios-dark.css"
+import "./android.css"
 import "@/components/dialkit/theme.css"
 
 initFluidSystem()

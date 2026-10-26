@@ -1,0 +1,102 @@
+/*
+ * Dark mode for the iPhone prototype.
+ *
+ * The app's colors are literal hex values in its classes (it was drawn from Figma light mode), so rather
+ * than touch every component this maps those exact classes to their dark counterparts, scoped to the
+ * phone screen (`.ios-screen`) under `.dark`. The glass already has dark materials of its own (it reads
+ * the theme), so it follows the toggle without help. Add a class here when you add a new literal color.
+ */
+
+/* Screen and surfaces */
+.dark .ios-screen { --expand-shadow: rgba(0, 0, 0, 0.55); --expand-shadow-near: rgba(0, 0, 0, 0.35); background-color: #1c1c1e; --ios-page-tint: rgba(28, 28, 30, 0.7); --ios-page-tint-strong: rgba(28, 28, 30, 0.92); }
+/* The frosted wash that gives the open More menu its body (the glass under it is already dark). */
+.dark .ios-screen { --ios-menu-wash: rgba(44, 44, 46, 0.72); }
+.dark .ios-screen .bg-\[\#f3f2f6\] { background-color: #1c1c1e; }
+.dark .ios-screen .bg-white,
+.dark .ios-screen .bg-\[\#fbfbfc\] { background-color: #252527; }
+.dark .ios-screen .bg-white\/70 { background-color: rgb(37 37 39 / 0.7); }
+.dark .ios-screen .bg-\[\#e9e8ec\],
+.dark .ios-screen .bg-\[\#ebe8ef\],
+.dark .ios-screen .bg-\[\#e9e6df\] { background-color: #333335; }
+/* The frosted toolbar behind a scrolled overview page, and its hairline. */
+.dark .ios-screen .bg-\[\#f3f2f6\]\/70 { background-color: rgb(28 28 30 / 0.7); }
+.dark .ios-screen .border-black\/\[0\.14\] { border-color: rgb(255 255 255 / 0.14); }
+/* Structure-mode skeleton fill. */
+.dark .ios-screen .bg-\[\#dedde4\] { background-color: #3a3a3c; }
+.dark .ios-screen .bg-\[\#ece6fb\],
+.dark .ios-screen .bg-\[\#f1ecfc\] { background-color: rgb(143 85 229 / 0.3); }
+.dark .ios-screen .bg-\[\#c3c3c6\] { background-color: #48484a; }
+.dark .ios-screen .bg-\[\#fdeaea\] { background-color: rgb(255 59 48 / 0.2); }
+.dark .ios-screen .bg-black\/5 { background-color: rgb(255 255 255 / 0.08); }
+.dark .ios-screen .bg-black\/10 { background-color: rgb(255 255 255 / 0.14); }
+/* The selected-day chip is black on light: flip it. (The scrim is bg-black with no text-white, so it's untouched.) */
+.dark .ios-screen .bg-black.text-white { background-color: #fff; color: #000; }
+
+/* Text */
+.dark .ios-screen .text-black,
+.dark .ios-screen .text-\[\#2c2935\],
+.dark .ios-screen .text-\[\#141414\],
+.dark .ios-screen .text-\[\#1a1a1a\] { color: #f5f5f7; }
+.dark .ios-screen .text-\[\#5a5666\],
+.dark .ios-screen .text-\[\#747182\],
+.dark .ios-screen .text-\[\#7f7f7f\],
+.dark .ios-screen .text-\[\#8e8e93\],
+.dark .ios-screen .text-\[\#928fa0\],
+.dark .ios-screen .text-\[\#999\],
+.dark .ios-screen .text-\[\#939393\],
+.dark .ios-screen .text-\[\#4e4e4e\],
+.dark .ios-screen .text-\[\#7a7790\],
+.dark .ios-screen .text-\[\#a2a2a2\],
+.dark .ios-screen .text-\[\#9a9a9a\],
+.dark .ios-screen .placeholder\:text-\[\#928fa0\]::placeholder,
+.dark .ios-screen .placeholder\:text-\[\#7f7f7f\]::placeholder,
+.dark .ios-screen .placeholder\:text-\[\#9a97a6\]::placeholder { color: #9d9da6; }
+.dark .ios-screen .text-\[\#b9b8c1\],
+.dark .ios-screen .text-\[\#c7c7cc\],
+.dark .ios-screen .text-\[\#dadada\] { color: #5c5c63; }
+.dark .ios-screen .text-\[\#6b3fc4\] { color: #c9b0ff; }
+.dark .ios-screen .text-\[\#4a2f86\] { color: #e4d9ff; }
+.dark .ios-screen .text-\[\#b8620a\] { color: #ffb066; }
+.dark .ios-screen .text-\[\#e00000\] { color: #ff6b61; }
+
+/* Lines */
+.dark .ios-screen .border-\[\#ebebeb\],
+.dark .ios-screen .border-black\/10,
+.dark .ios-screen .border-black\/\[0\.09\] { border-color: rgb(255 255 255 / 0.12); }
+.dark .ios-screen .border-\[\#cfcfcf\],
+.dark .ios-screen .border-\[\#c7c7cc\] { border-color: #48484a; }
+.dark .ios-screen .ring-white,
+.dark .ios-screen .ring-white\/80 { --tw-ring-color: #252527; }
+.dark .ios-screen .border-white { border-color: #252527; }
+
+/* Inline-styled surfaces (sheets, popovers, keyboard, calendar panel) */
+.dark .ios-screen [style*="rgba(255,255,255,0.78)"],
+.dark .ios-screen [style*="rgba(255, 255, 255, 0.78)"] { background-color: rgb(37 37 39 / 0.82) !important; }
+.dark .ios-screen [style*="rgba(255,255,255,0.9)"],
+.dark .ios-screen [style*="rgba(255, 255, 255, 0.9)"] { background-color: rgb(37 37 39 / 0.9) !important; }
+.dark .ios-screen [style*="rgba(255,255,255,0.88)"],
+.dark .ios-screen [style*="rgba(255, 255, 255, 0.88)"] { background-color: rgb(37 37 39 / 0.88) !important; }
+.dark .ios-screen [style*="rgba(250,250,250,0.78)"],
+.dark .ios-screen [style*="rgba(250, 250, 250, 0.78)"] { background-color: rgb(51 51 53 / 0.82) !important; }
+.dark .ios-screen .ios-keyboard { background-color: rgb(37 37 39 / 0.94) !important; }
+.dark .ios-screen .ios-keyboard .bg-white { background-color: #4e4e52; }
+
+/* Icons drawn as masks with an inline color, and dark SVG <img> icons */
+.dark .ios-screen [style*="background-color: rgb(20, 20, 20)"],
+.dark .ios-screen [style*="background-color: rgb(44, 41, 53)"] { background-color: #f5f5f7 !important; }
+.dark .ios-screen img[src$=".svg"]:not([src*="/row-"]):not([src*="/act-"]) { filter: invert(1) brightness(1.1); }
+.dark .ios-screen [style*="color: rgb(20, 20, 20)"],
+.dark .ios-screen [style*="color: rgb(44, 41, 53)"] { color: #f5f5f7 !important; }
+
+/* Needs Review: the note under each tab, one color family per tab (purple is mapped above). */
+.dark .ios-screen .bg-\[\#e8f1fd\] { background-color: rgb(10 132 255 / 0.22); }
+.dark .ios-screen .bg-\[\#d6e6fb\] { background-color: rgb(10 132 255 / 0.32); }
+.dark .ios-screen .text-\[\#1a5fb4\] { color: #8ec5ff; }
+.dark .ios-screen .bg-\[\#e6f5ea\] { background-color: rgb(52 199 89 / 0.2); }
+.dark .ios-screen .bg-\[\#d3ecda\] { background-color: rgb(52 199 89 / 0.3); }
+.dark .ios-screen .text-\[\#1f7a3a\] { color: #7ee29a; }
+.dark .ios-screen .bg-\[\#fdf0e2\] { background-color: rgb(255 149 0 / 0.2); }
+.dark .ios-screen .bg-\[\#fbe3c8\] { background-color: rgb(255 149 0 / 0.3); }
+.dark .ios-screen .bg-\[\#fde9f0\] { background-color: rgb(255 55 120 / 0.2); }
+.dark .ios-screen .bg-\[\#fbd5e3\] { background-color: rgb(255 55 120 / 0.3); }
+.dark .ios-screen .text-\[\#b4235a\] { color: #ff8fb3; }

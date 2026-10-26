@@ -494,7 +494,9 @@ export function useLiquidGlass({
   cornerSmoothing = 0,
   shadow = "lg",
 }: LiquidGlassOptions = {}): UseLiquidGlass {
-  const [ref, bounds] = useMeasure()
+  // offsetSize: measure layout size, not the transformed box — otherwise glass inside
+  // a scaled ancestor (the iPhone frame) or mid scale-in gets a too-small map + clip.
+  const [ref, bounds] = useMeasure({ offsetSize: true })
   const rawId = useId()
   const filterId = `liquid-glass-${rawId.replace(/[^a-zA-Z0-9]/g, "")}`
 

@@ -1,0 +1,89 @@
+/* Android (Material 3) tokens for the structure cut. Light on .android-screen, dark under .dark. Brand purple seed. */
+.android-screen {
+  --m-surface: #fdf8ff;
+  --m-container-low: #f7f2fa;
+  --m-container: #f3edf7;
+  --m-container-high: #ece6f0;
+  --m-on-surface: #1d1b20;
+  --m-variant: #49454f;
+  --m-outline: #7a757f;
+  --m-outline-variant: #cac4d0;
+  --m-primary: #7a45d6;
+  --m-on-primary: #ffffff;
+  --m-primary-container: #ecddff;
+  --m-on-primary-container: #2b0b66;
+  --m-secondary-container: #e8def8;
+  --m-on-secondary-container: #1d192b;
+  --m-skeleton: #ddd6e3;
+  --m-error: #ba1a1a;
+  /* android-nav: inactive tab grey, active brand purple, unread badge. */
+  --m-nav-active: #8f55e5;
+  --m-nav-inactive: #8a8891;
+  --m-badge: #e5484d;
+  /* android tab bar (Designbase "Android Tab Bar"): white pill, purple selected item, FAB. Values are the Figma tokens. */
+  --m-tab-pill: #ffffff;
+  /* the pill as frosted glass: translucent fill, a light inner edge, a hairline outside it, and a soft ambient lift */
+  --m-tab-glass: rgba(255, 255, 255, 0.6);
+  --m-tab-edge-in: rgba(255, 255, 255, 0.75);
+  --m-tab-edge-out: rgba(60, 40, 90, 0.1);
+  --m-tab-lift: rgba(60, 40, 90, 0.16);
+  --m-tab-icon: #4a454e;
+  --m-tab-selected: #ebddf7;
+  --m-tab-icon-selected: #4c4357;
+  --m-fab: #6b548d;
+  --m-fab-icon: #ffffff;
+  --m-scrim: rgb(0 0 0 / 0.32);
+  font-family: Roboto, "Google Sans", system-ui, sans-serif;
+  color: var(--m-on-surface);
+}
+.dark .android-screen {
+  --m-surface: #141218;
+  --m-container-low: #1d1b20;
+  --m-container: #211f26;
+  --m-container-high: #2b2930;
+  --m-on-surface: #e6e0e9;
+  --m-variant: #cac4d0;
+  --m-outline: #938f99;
+  --m-outline-variant: #49454f;
+  --m-primary: #d3bcff;
+  --m-on-primary: #3b0f86;
+  --m-primary-container: #5429a8;
+  --m-on-primary-container: #ecddff;
+  --m-secondary-container: #4a4458;
+  --m-on-secondary-container: #e8def8;
+  --m-skeleton: #3a3741;
+  --expand-shadow: rgba(0, 0, 0, 0.55);
+  --expand-shadow-near: rgba(0, 0, 0, 0.35);
+  --m-nav-active: #a77bf0;
+  --m-nav-inactive: #9a97a3;
+  --m-tab-pill: var(--m-container-high);
+  --m-tab-glass: color-mix(in srgb, var(--m-container-high) 62%, transparent);
+  --m-tab-edge-in: rgba(255, 255, 255, 0.14);
+  --m-tab-edge-out: rgba(0, 0, 0, 0.5);
+  --m-tab-lift: rgba(0, 0, 0, 0.45);
+  --m-tab-icon: var(--m-variant);
+  --m-tab-selected: var(--m-secondary-container);
+  --m-tab-icon-selected: var(--m-on-secondary-container);
+  --m-fab: var(--m-primary);
+  --m-fab-icon: var(--m-on-primary);
+}
+.bg-m-surface { background-color: var(--m-surface); }
+.bg-m-low { background-color: var(--m-container-low); }
+.bg-m-container { background-color: var(--m-container); }
+.bg-m-high { background-color: var(--m-container-high); }
+.bg-m-primary { background-color: var(--m-primary); }
+.bg-m-primary-container { background-color: var(--m-primary-container); }
+.bg-m-secondary-container { background-color: var(--m-secondary-container); }
+.bg-m-skeleton { background-color: var(--m-skeleton); }
+.bg-m-on-primary { background-color: var(--m-on-primary); }
+.bg-m-outline { background-color: var(--m-outline); }
+.bg-m-variant { background-color: var(--m-variant); }
+.text-m-on-surface { color: var(--m-on-surface); }
+.text-m-variant { color: var(--m-variant); }
+.text-m-outline { color: var(--m-outline); }
+.text-m-primary { color: var(--m-primary); }
+.text-m-on-primary { color: var(--m-on-primary); }
+.text-m-on-primary-container { color: var(--m-on-primary-container); }
+.text-m-on-secondary-container { color: var(--m-on-secondary-container); }
+.border-m-outline { border-color: var(--m-outline); }
+.border-m-divider { border-color: var(--m-outline-variant); }
