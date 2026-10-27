@@ -23,11 +23,8 @@ const SNAP = { type: "spring" as const, ...SPRING_FAST.snappy }
 /** Whole class names, so Tailwind sees them. */
 const CLAMP: Record<DetailLines, string> = { 1: "line-clamp-1", 2: "line-clamp-2", 3: "line-clamp-3" }
 
-/** Text classes for a row: version A, and version B, a step down (title and text both 14, small 12). */
-const TEXT = {
-  a: { title: "text-[17px] leading-[22px]", small: "text-[13px] leading-[18px]", body: "text-[15px] leading-5" },
-  b: { title: "text-[14px] leading-[19px]", small: "text-[12px] leading-4", body: "text-[14px] leading-[19px]" },
-}
+/** Text classes for a row, in both versions: the name and the description both 14, the small text (times, properties) 12. */
+const TEXT = { title: "text-[14px] leading-[19px]", small: "text-[12px] leading-4", body: "text-[14px] leading-[19px]" }
 
 const URGENCY: Record<ReviewUrgency, { label: string; chip: string }> = {
   high: { label: "High urgency", chip: "bg-[#fdeaea] text-[#e00000]" },
@@ -170,11 +167,11 @@ function ClockoutTimeline({ clockedIn, expectedOut, role, small }: { clockedIn: 
 }
 
 /** Everything known about a row, as the expanded row and the long-press card both show it: the facts (or the clock-out timeline) and the assistant's note. */
-function RowContext({ item, t, small }: { item: ReviewItem; t: { body: string }; small?: boolean }) {
+function RowContext({ item, t }: { item: ReviewItem; t: { body: string } }) {
   return (
     <>
       {item.data.kind === "clockout" ? (
-        <ClockoutTimeline {...item.data} small={small} />
+        <ClockoutTimeline {...item.data} small />
       ) : (
         <dl className="flex flex-col gap-[6px] rounded-2xl bg-[#f3f2f6] px-3 py-[10px]">
           {item.facts.map(([label, value]) => (
@@ -201,8 +198,8 @@ function RowContext({ item, t, small }: { item: ReviewItem; t: { body: string };
  */
 function RowButtons({ item, names, accent, main, onRun, onApprove, stacked }: { item: ReviewItem; names: string; accent: string; main: string; onRun: () => void; onApprove: () => void; stacked?: boolean }) {
   const plan = hasPlan(item)
-  const gray = "flex items-center justify-center whitespace-nowrap rounded-full bg-black/5 text-[15px] font-[590] text-black active:opacity-60"
-  const primary = "flex items-center justify-center gap-[6px] whitespace-nowrap rounded-full text-[15px] font-[590] text-white active:opacity-80"
+  const gray = "flex items-center justify-center whitespace-nowrap rounded-full bg-black/5 text-[14px] font-[590] text-black active:opacity-60"
+  const primary = "flex items-center justify-center gap-[6px] whitespace-nowrap rounded-full text-[14px] font-[590] text-white active:opacity-80"
   const mainButton = (cls: string) =>
     plan ? (
       <button onClick={onApprove} style={{ backgroundColor: accent }} className={cn(primary, cls)}>
@@ -216,7 +213,7 @@ function RowButtons({ item, names, accent, main, onRun, onApprove, stacked }: { 
     )
   if (stacked) {
     // Liquid glass, one pill per button, full width: the main action tinted in the tab's color.
-    const glass = "flex h-full w-full items-center justify-center gap-[6px] whitespace-nowrap rounded-full text-[15px] font-[590] active:opacity-70"
+    const glass = "flex h-full w-full items-center justify-center gap-[6px] whitespace-nowrap rounded-full text-[14px] font-[590] active:opacity-70"
     return (
       <div className="flex flex-col gap-2">
         <LiquidGlass mode="small" accent={accent} radius={999} className="flex h-11 w-full items-center justify-center">
@@ -250,10 +247,10 @@ function RowButtons({ item, names, accent, main, onRun, onApprove, stacked }: { 
         mainButton("h-10 flex-1 px-3")
       ) : (
         <>
-          <button aria-haspopup="dialog" className={cn(gray, "h-10 flex-1 px-3")}>
+          <button aria-haspopup="dialog" className={cn(gray, "h-10 min-w-0 flex-1 basis-0 px-2")}>
             Solve manually
           </button>
-          {mainButton("h-10 flex-[1.5] px-3")}
+          {mainButton("h-10 min-w-0 flex-1 basis-0 px-2")}
         </>
       )}
     </div>
@@ -321,7 +318,7 @@ export function ReviewRow({
 }) {
   // Version B: one button on the right of every row in place of the buttons under the expanded row, and the type a step down.
   const b = useVersionStore((v) => v.version) === "b"
-  const t = TEXT[b ? "b" : "a"]
+  const t = TEXT
   const main = agentPlan(item).label
   // B ends the description with the time, always shown: when the text is longer than the line limit, the text is cut with an
   // ellipsis to leave room for it. A hidden copy of the line measures how much fits.
@@ -495,7 +492,7 @@ export function ReviewRow({
           </span>
           {agent ? (
             // The second line is the agent's progress: the step it's on, then what it did, in the same gray as the description.
-            <span className={cn("relative mt-px block h-5 overflow-hidden", b ? "text-[14px] leading-5" : "text-[15px] leading-5")} aria-live="polite">
+            <span className={"relative mt-px block h-5 overflow-hidden text-[14px] leading-5"} aria-live="polite">
               <AnimatePresence initial={false} mode="popLayout">
                 <motion.span
                   key={agent.done ? "done" : agent.step}
@@ -519,7 +516,7 @@ export function ReviewRow({
               {b && <span ref={probe} aria-hidden className={cn("invisible absolute inset-x-0 top-0 block text-[#8e8e93]", t.body)} />}
             </span>
           )}
-          <RowProperties item={item} show={properties} small={b} />
+          <RowProperties item={item} show={properties} small />
           </span>
           </span>
         </button>
@@ -601,7 +598,7 @@ export function ReviewRow({
         >
           {/* B: the expanded context lines up with the text, under it and not under the avatar (40px + its 12px gap, closing up with the avatar when the photos are off). */}
           <motion.div initial={false} animate={{ paddingLeft: b && photos ? 52 : 0 }} transition={SNAP} className="pb-4 tracking-[-0.43px]">
-            <RowContext item={item} t={t} small={b} />
+            <RowContext item={item} t={t} />
             {!b && (
               <div className="mt-3">
                 <RowButtons item={item} names={names} accent={accent} main={main} onRun={onRun} onApprove={onApprove} />
@@ -619,16 +616,16 @@ export function ReviewRow({
             <AvatarSlot show={photos} people={item.people ?? [item.title]} />
             <span className="min-w-0 flex-1 tracking-[-0.43px]">
               <span className="flex items-baseline justify-between gap-3">
-                <span className="font-[590] text-[17px] leading-[22px] text-black">{item.title}</span>
-                <span className="shrink-0 text-[13px] leading-[18px] text-[#7f7f7f]">{item.when}</span>
+                <span className={cn("font-[590] text-black", TEXT.title)}>{item.title}</span>
+                <span className={cn("shrink-0 text-[#7f7f7f]", TEXT.small)}>{item.when}</span>
               </span>
-              <span className="mt-px block text-[15px] leading-5 text-[#8e8e93]">{item.detail}</span>
+              <span className={cn("mt-px block text-[#8e8e93]", TEXT.body)}>{item.detail}</span>
             </span>
           </span>
         }
         content={
           <div className="pb-4 tracking-[-0.43px]">
-            <RowContext item={item} t={TEXT.a} />
+            <RowContext item={item} t={TEXT} />
           </div>
         }
         footer={(close) => (

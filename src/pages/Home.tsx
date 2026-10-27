@@ -968,6 +968,21 @@ function NotificationsPage({ tab, query, filters, photos, properties, detailLine
   const [completed, setCompleted] = useState<string[]>([])
   const [completedOpen, setCompletedOpen] = useState(false)
   const [working, setWorking] = useState<Record<string, { step: number; done: boolean }>>({})
+  // Version A: completing a row (the assistant finishing it, or an Approve) opens the next one down, or the one above if it was the
+  // last, as the gap closes. `order` is the rows as they're laid out now, read when the time comes.
+  const isA = useVersionStore((v) => v.version) === "a"
+  const order = useRef<string[]>([])
+  const openNext = (id: string) => {
+    if (!isA) return
+    const ids = order.current
+    const at = ids.indexOf(id)
+    const next = ids[at + 1] ?? ids[at - 1]
+    if (at < 0 || !next) return
+    window.setTimeout(() => {
+      setOpenId(next)
+      setRead((r) => new Set(r).add(next))
+    }, 380)
+  }
   // The timers behind each running task, so stopping one (the stop button on B's row) can clear them.
   const timers = useRef<Record<string, number[]>>({})
   const stop = (id: string) => {
@@ -990,8 +1005,11 @@ function NotificationsPage({ tab, query, filters, photos, properties, detailLine
     setWorking((w) => ({ ...w, [item.id]: { step: 0, done: false } }))
     steps.forEach((_, i) => i > 0 && at(i * STEP, () => setWorking((w) => ({ ...w, [item.id]: { step: i, done: false } }))))
     at(steps.length * STEP, () => setWorking((w) => ({ ...w, [item.id]: { step: steps.length - 1, done: true } })))
-    // Done: the row leaves its section for the Assistant Tasks group at the top.
-    at(steps.length * STEP + 1800, () => setCompleted((c) => [item.id, ...c]))
+    // Done: the row leaves its section for the Assistant Tasks group at the top, and the next one opens (version A).
+    at(steps.length * STEP + 1800, () => {
+      setCompleted((c) => [item.id, ...c])
+      openNext(item.id)
+    })
   }
   const flip = (set: ReadonlySet<string>, id: string) => {
     const next = new Set(set)
@@ -1012,6 +1030,7 @@ function NotificationsPage({ tab, query, filters, photos, properties, detailLine
   const sections = reviewSectionsFor(tab, query, filters, grouping)
     .map((sec) => ({ ...sec, items: sec.items.filter((i) => !dismissed.has(i.id) && !completed.includes(i.id)) }))
     .filter((sec) => sec.items.length > 0)
+  order.current = sections.flatMap((sec) => sec.items.map((i) => i.id))
   if (sections.length === 0 && (query.trim() || filters.unreadOnly || filters.roles.size > 0 || filters.range !== "any")) {
     return <p className="pt-16 text-center text-[17px] leading-[22px] tracking-[-0.43px] text-[#8e8e93]">{query.trim() ? `No results for “${query.trim()}”` : filters.unreadOnly && filters.roles.size === 0 && filters.range === "any" ? "Nothing unread" : "Nothing matches these filters"}</p>
   }
@@ -1116,6 +1135,7 @@ function NotificationsPage({ tab, query, filters, photos, properties, detailLine
                     setRead((r) => new Set(r).add(i.id))
                     setOpenId(null)
                     setDismissed((d) => new Set(d).add(i.id))
+                    openNext(i.id)
                   }}
                   unread={!!i.unread && !read.has(i.id)}
                   open={openId === i.id}
