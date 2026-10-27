@@ -43,6 +43,8 @@ import { TimeClockContent, sheetHeightFor } from "@/components/ios/TimeClockCont
 import { FullPage } from "@/components/ios/FullPage"
 import { ColorTabs, type ColorTab } from "@/components/ios/ColorTabs"
 import { ReviewRow } from "@/components/ios/ReviewRow"
+import { VersionSwitch } from "@/components/VersionSwitch"
+import { useVersionStore } from "@/store/useVersionStore"
 import { ReviewBar } from "@/components/ios/ReviewBar"
 import { ReviewFilterSheet } from "@/components/ios/ReviewFilterSheet"
 import { AddReviewSheet } from "@/components/ios/AddReviewSheet"
@@ -910,7 +912,14 @@ function EmployeeDashboard({ loc, split, bare, onScroll, onOpenPage }: { loc: Lo
 
 export function Home() {
   const platform = useViewStore((s) => s.platform)
-  return platform === "android" ? <AndroidHome /> : <IosHome />
+  const version = useVersionStore((s) => s.version)
+  return (
+    // Each version is its own mount (keyed), so a version keeps nothing from the one before: state, open sheets, rows done.
+    <div key={version} data-version={version} className="contents">
+      {platform === "android" ? <AndroidHome /> : <IosHome />}
+      <VersionSwitch />
+    </div>
+  )
 }
 
 /** Android isn't built yet: the frame with the page's title. */
@@ -959,9 +968,22 @@ function NotificationsPage({ tab, query, filters, photos, properties, detailLine
   const [completed, setCompleted] = useState<string[]>([])
   const [completedOpen, setCompletedOpen] = useState(false)
   const [working, setWorking] = useState<Record<string, { step: number; done: boolean }>>({})
+  // The timers behind each running task, so stopping one (the stop button on B's row) can clear them.
+  const timers = useRef<Record<string, number[]>>({})
+  const stop = (id: string) => {
+    timers.current[id]?.forEach((t) => window.clearTimeout(t))
+    delete timers.current[id]
+    setWorking((w) => {
+      const { [id]: _stopped, ...rest } = w
+      return rest
+    })
+  }
   const run = (item: ReviewItem) => {
     const { steps } = agentPlan(item)
-    const at = (ms: number, fn: () => void) => window.setTimeout(fn, ms)
+    const at = (ms: number, fn: () => void) => {
+      const t = window.setTimeout(fn, ms)
+      ;(timers.current[item.id] ??= []).push(t)
+    }
     const STEP = 1400
     setOpenId((cur) => (cur === item.id ? null : cur))
     setRead((r) => new Set(r).add(item.id))
@@ -1049,11 +1071,15 @@ function NotificationsPage({ tab, query, filters, photos, properties, detailLine
           transition={{ type: "spring", ...SPRING_FAST.snappy }}
           className={cn("overflow-y-clip", !grouped && idx < sections.length - 1 && "border-b border-black/[0.09]")}
         >
+          {/* The header sticks under the tabs as its section scrolls up to them, and lets go when the section's last row passes. It has no background of its own: the page's frosted bar is behind it. */}
           <motion.div
             initial={false}
             animate={{ height: grouped ? "auto" : 0, opacity: grouped ? 1 : 0 }}
             transition={{ type: "spring", ...SPRING_FAST.snappy }}
-            className="overflow-hidden"
+            // The offset counts from the scroller's padding edge: the page pads its content 112px below the safe area (title and tabs), so
+            // -20 sticks it 92px below the safe area, right under the tab row (54px for the title, 36 for the tabs).
+            style={{ top: -20 }}
+            className="sticky z-10 overflow-hidden"
             aria-hidden={!grouped}
             inert={!grouped}
           >
@@ -1082,8 +1108,10 @@ function NotificationsPage({ tab, query, filters, photos, properties, detailLine
                   photos={photos}
                   properties={properties}
                   detailLines={detailLines}
+                  dimmed={openId !== null && openId !== i.id}
                   agent={working[i.id] && { ...working[i.id], steps: agentPlan(i).steps, doneText: agentPlan(i).done }}
                   onRun={() => run(i)}
+                  onStop={() => stop(i.id)}
                   onApprove={() => {
                     setRead((r) => new Set(r).add(i.id))
                     setOpenId(null)
@@ -1224,7 +1252,8 @@ function IosHome() {
   const [showPhotos, setShowPhotos] = useState(true)
   const [grouping, setGrouping] = useState<ReviewGroup>("type")
   const [viewOpen, setViewOpen] = useState(false)
-  const [detailLines, setDetailLines] = useState<DetailLines>(1)
+  // Version B opens with two lines of description (A, one); either can be changed in View Options.
+  const [detailLines, setDetailLines] = useState<DetailLines>(useVersionStore.getState().version === "b" ? 2 : 1)
   // Which properties each row shows beneath its description (View Options). Off to begin with: the rows read as designed.
   const [rowProps, setRowProps] = useState<Record<ReviewProperty, boolean>>({ role: false, location: false, urgency: false })
   // Sorting alone isn't a filter: the pill is for what's narrowed.
@@ -1502,7 +1531,10 @@ function IosHome() {
             }
             footer={<ReviewBar query={reviewQuery} onQuery={setReviewQuery} filtered={reviewFiltered} summary={reviewSummary} onFilter={() => setReviewFilters((f) => ({ ...f, unreadOnly: true }))} onClear={() => setReviewFilters((f) => ({ ...NO_REVIEW_FILTERS, sort: f.sort }))} onOptions={() => setFiltersOpen(true)} />}
             subheader={<ColorTabs tabs={REVIEW_TABS} value={reviewTab} onChange={setReviewTab} />}>
-            <NotificationsPage key={reviewReset} tab={reviewTab} query={reviewQuery} filters={reviewFilters} photos={showPhotos} properties={rowProps} detailLines={detailLines} grouping={grouping} onAdd={setAddKind} />
+            {/* The menus on a row (the button's chevron) render into the screen layer, over the whole phone. */}
+            <OverlayRoot.Provider value={screen}>
+              <NotificationsPage key={reviewReset} tab={reviewTab} query={reviewQuery} filters={reviewFilters} photos={showPhotos} properties={rowProps} detailLines={detailLines} grouping={grouping} onAdd={setAddKind} />
+            </OverlayRoot.Provider>
           </FullPage>
         )}
         {homePage && (

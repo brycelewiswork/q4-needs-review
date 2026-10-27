@@ -144,6 +144,14 @@ export type ReviewItem = RawItem & {
   location: string
 }
 
+/** How long ago, relative only, with no "ago": "3h", "2d", "2w". */
+export function agoLabel(hours: number): string {
+  if (hours < 1) return "now"
+  if (hours < 24) return `${Math.floor(hours)}h`
+  const days = Math.floor(hours / 24)
+  return days < 14 ? `${days}d` : `${Math.floor(days / 7)}w`
+}
+
 export type ReviewUrgency = "high" | "medium" | "low"
 
 /** How urgent an item is, from its signal: the AI's read, in three levels. */

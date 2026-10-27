@@ -1,7 +1,6 @@
 import { IconBrandAppleFilled, IconDeviceMobile, IconDeviceTablet, IconRectangle, IconRectangleVertical } from "@tabler/icons-react"
 import { SegmentedControl } from "@/components/ios/SegmentedControl"
 import { useViewStore } from "@/store/useViewStore"
-import { VERSION } from "@/lib/version"
 
 /** Tabler has no filled Android mark, so this is the Material "android" glyph (Apache 2.0). */
 function AndroidFilled({ size = 18 }: { size?: number }) {
@@ -21,17 +20,6 @@ export function DeviceControls() {
   const orientation = useViewStore((s) => s.orientation)
   const setOrientation = useViewStore((s) => s.setOrientation)
   return (
-    <div className="flex flex-col items-center gap-3">
-    <div className="w-full max-w-[680px] px-4 text-left">
-      <h1 className="text-[15px] font-semibold leading-5 text-neutral-900 dark:text-neutral-100">{VERSION.title}</h1>
-      {VERSION.subtitle.length > 0 && (
-      <div className="mt-1 flex flex-col gap-2">
-        {VERSION.subtitle.map((p) => (
-          <p key={p} className="text-[13px] leading-[18px] text-neutral-500 dark:text-neutral-400">{p}</p>
-        ))}
-      </div>
-      )}
-    </div>
     <div className="flex items-center gap-3">
       <SegmentedControl
         className="w-[92px]"
@@ -60,7 +48,6 @@ export function DeviceControls() {
           { id: "landscape", label: <IconRectangle size={18} stroke={1.75} />, ariaLabel: "Landscape" },
         ]}
       />
-    </div>
     </div>
   )
 }
